@@ -1,0 +1,5 @@
+.env
+.log
+ER-diagram.drawio
+__pycache__/
+*.pyc
