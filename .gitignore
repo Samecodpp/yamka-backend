@@ -3,3 +3,4 @@
 ER-diagram.drawio
 __pycache__/
 *.pyc
+.vscode/
