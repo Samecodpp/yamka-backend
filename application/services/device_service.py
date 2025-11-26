@@ -18,12 +18,12 @@ class DeviceService:
             return None
 
         return device
-    
+
     @staticmethod
     def valid_data(data: dict) -> bool:
-        required_keys = {"device_name", "mac_address", "lat", "lon", "speed", "accel_x", "accel_y", "accel_z", "gyro_x", "gyro_y", "gyro_z"}
+        required_keys = {"device_name", "mac_address", "lat", "lon", "speed", "vibration", "accel_x", "accel_y", "accel_z", "gyro_x", "gyro_y", "gyro_z"}
         return required_keys.issubset(set(data.keys()))
-    
+
     @staticmethod
     def store_report(device: Device, payload: dict) -> DeviceReport:
         report =  DeviceReport(
@@ -40,5 +40,5 @@ class DeviceService:
         except IntegrityError:
             db.session.rollback()
             return None
-        
+
         return report

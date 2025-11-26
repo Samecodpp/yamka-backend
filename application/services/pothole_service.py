@@ -18,34 +18,34 @@ class PotholeService:
         )
         c = 2.0 * func.asin(func.sqrt(a))
         return R * c
-    
+
     @staticmethod
     def register_pothole(data: dict) -> Pothole:
         existing = Pothole.query.filter(
             PotholeService._distance_expr(Pothole.latitude, Pothole.longitude, data['lat'], data['lon']) <= 5.0
         ).first()
-        
+
         if existing:
-            existing.report_count += 1
-            existing.score = data['score']
-            return existing
-        
-        pothole = Pothole(
-            latitude=data['lat'],
-            longitude=data['lon'],
-            score=data['score'],
-            report_count=1
-            )
-        
-        db.session.add(pothole)
+            pothole = existing
+            pothole.report_count += 1
+            pothole.score = data['score']
+        else:
+            pothole = Pothole(
+                latitude=data['lat'],
+                longitude=data['lon'],
+                score=data['score'],
+                report_count=1
+                )
+            db.session.add(pothole)
+
         try:
             db.session.commit()
         except IntegrityError:
             db.session.rollback()
             return None
-        
+
         return pothole
-            
+
     @staticmethod
     def evaluate(data: dict):
         accel = math.sqrt(math.pow(data["accel_x"], 2) + math.pow(data["accel_y"], 2) + math.pow(data["accel_z"], 2))
