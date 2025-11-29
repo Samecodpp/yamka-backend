@@ -38,7 +38,7 @@ class DeviceReport(db.Model):
     accel = db.Column(JSONB)
     gyro = db.Column(JSONB)
     reported_at = db.Column(db.DateTime, default=func.now())
-    pothole_id = db.Column(db.Integer, db.ForeignKey('potholes.id'))
+    pothole_id = db.Column(db.Integer, db.ForeignKey('potholes.id', ondelete='SET NULL'))
     pothole = db.relationship('Pothole', backref=db.backref('reports', lazy=True))
 
 class Pothole(db.Model):
