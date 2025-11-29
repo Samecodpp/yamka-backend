@@ -10,3 +10,9 @@ psycopg2-binary
 gunicorn
 celery
 redis
+joblib
+scikit-learn
+pandas
+numpy
+matplotlib
+seaborn

@@ -2,7 +2,7 @@ FROM python:3.11-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential libpq-dev gcc \
- && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ COPY . .
 RUN useradd -ms /bin/bash appuser && chown -R appuser:appuser /app
 USER appuser
 
-ENV FLASK_APP=app.py
+ENV FLASK_APP=wsgi.py
 ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
