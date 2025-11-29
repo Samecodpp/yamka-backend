@@ -1,33 +1,37 @@
 from flask import request, jsonify
+from marshmallow import ValidationError
 from ..services.user_service import register_user, authenticate_user
+from ..schemas import UserSchema, UserRegisterSchema, UserLoginSchema
 from . import auth_bp
+
+user_schema = UserSchema()
+register_schema = UserRegisterSchema()
+login_schema = UserLoginSchema()
+
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
-    data = request.get_json() or {}
-    username = data.get("username")
-    email = data.get("email")
-    password = data.get("password")
-    if not username or not email or not password:
-        return jsonify({"message": "username, email and password required"}), 400
+    try:
+        validated_data = register_schema.load(request.get_json() or {})
+    except ValidationError as err:
+        return jsonify({"errors": err.messages}), 400
 
-    user = register_user(username, email, password)
+    user = register_user(validated_data['username'], validated_data['email'], validated_data['password'])
     if user is None:
         return jsonify({"message": "User already exists or could not be created"}), 409
 
-    return jsonify({"id": user.id, "username": user.username, "email": user.email}), 201
+    return user_schema.dump(user), 201
 
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    data = request.get_json() or {}
-    email = data.get("email")
-    password = data.get("password")
-    if not email or not password:
-        return jsonify({"message": "Email and password required"}), 400
+    try:
+        validated_data = login_schema.load(request.get_json() or {})
+    except ValidationError as err:
+        return jsonify({"errors": err.messages}), 400
 
-    user = authenticate_user(email, password)
+    user = authenticate_user(validated_data['email'], validated_data['password'])
     if user is None:
         return jsonify({"message": "Invalid credentials"}), 401
 
-    return jsonify({"id": user.id, "username": user.username, "email": user.email}), 200
+    return user_schema.dump(user), 200

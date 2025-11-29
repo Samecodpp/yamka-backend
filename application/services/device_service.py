@@ -20,19 +20,14 @@ class DeviceService:
         return device
 
     @staticmethod
-    def valid_data(data: dict) -> bool:
-        required_keys = {"device_name", "mac_address", "lat", "lon", "speed", "vibration", "accel_x", "accel_y", "accel_z", "gyro_x", "gyro_y", "gyro_z"}
-        return required_keys.issubset(set(data.keys()))
-
-    @staticmethod
-    def store_report(device: Device, payload: dict) -> DeviceReport:
-        report =  DeviceReport(
+    def store_report(device: Device, validated_data: dict) -> DeviceReport:
+        report = DeviceReport(
             device_id=device.id,
-            _location={"lat": payload['lat'], "lon": payload['lon']},
-            speed=payload['speed'],
-            vibration=payload['vibration'],
-            accel={"x": payload['accel_x'], "y": payload['accel_y'], "z": payload['accel_z']},
-            gyro={"x": payload['gyro_x'], "y": payload['gyro_y'], "z": payload['gyro_z']}
+            _location=validated_data['location'],
+            speed=validated_data.get('speed'),
+            vibration=validated_data.get('vibration'),
+            accel=validated_data.get('accel'),
+            gyro=validated_data.get('gyro')
         )
         db.session.add(report)
         try:

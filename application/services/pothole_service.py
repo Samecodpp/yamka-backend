@@ -27,8 +27,9 @@ class PotholeService:
 
         if existing:
             pothole = existing
+            total_score = pothole.score * pothole.report_count + data['score']
             pothole.report_count += 1
-            pothole.score = data['score']
+            pothole.score = total_score // pothole.report_count
         else:
             pothole = Pothole(
                 latitude=data['lat'],
@@ -45,10 +46,3 @@ class PotholeService:
             return None
 
         return pothole
-
-    @staticmethod
-    def evaluate(data: dict):
-        accel = math.sqrt(math.pow(data["accel_x"], 2) + math.pow(data["accel_y"], 2) + math.pow(data["accel_z"], 2))
-        gyro = math.sqrt(math.pow(data["gyro_x"], 2) + math.pow(data["gyro_y"], 2) + math.pow(data["gyro_z"], 2))
-        score = int(0.5 * accel + 0.5 * gyro + 0.5 * data["speed"] + 0.5 * data["vibration"])
-        return score

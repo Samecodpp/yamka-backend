@@ -1,4 +1,3 @@
-from pyexpat import model
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -6,6 +5,7 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 from .services.ml import model_init
+from redis import Redis
 import os
 
 db = SQLAlchemy()

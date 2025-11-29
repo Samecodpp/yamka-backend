@@ -59,9 +59,12 @@ def process_pothole_report(report_id: int):
                     pothole = PotholeService.register_pothole(pothole_data)
 
                     if pothole:
-                        report.pothole_id = pothole.id
-                        db.session.commit()
-
+                        try:
+                            report.pothole_id = pothole.id
+                            db.session.commit()
+                        except Exception as e:
+                            db.session.rollback()
+                            print(f"Report {report_id}: Failed to link pothole - {str(e)}")
                         print(f"Report {report_id}: Pothole registered (ID: {pothole.id}, severity: {prediction})")
                         return
                     else:
