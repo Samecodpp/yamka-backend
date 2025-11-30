@@ -7,7 +7,6 @@ from . import device_bp
 
 report_schema = DeviceReportSchema()
 
-
 @device_bp.route("/report", methods=["POST"])
 def report():
     try:

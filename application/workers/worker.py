@@ -32,6 +32,7 @@ def get_prediction(features: list):
         response = stub.Predict(request)
         return response.prediction
     except Exception as e:
+        print(f"Error calling ML service: {e}")
         raise
 
 from .tasks import *
