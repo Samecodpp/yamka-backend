@@ -25,9 +25,26 @@ def init_model():
     scaler = joblib.load(scaler_file)
     return {"model": model, "scaler": scaler}
 
-def predict(model, features: dict):
+def predict(model, features):
+    """
+    Predict pothole severity from sensor features
+
+    Args:
+        model: dict with 'model' and 'scaler' keys
+        features: list or RepeatedScalarContainer from gRPC
+
+    Returns:
+        int: predicted pothole severity (1-5)
+    """
     import pandas as pd
-    df = pd.DataFrame([features])
+
+    # Convert gRPC RepeatedScalarContainer to list
+    features_list = list(features)
+
+    feature_names = ['speed', 'accelerometerX', 'accelerometerY', 'accelerometerZ',
+                     'gyroX', 'gyroY', 'gyroZ']
+
+    df = pd.DataFrame([features_list], columns=feature_names)
     X_scaled = model['scaler'].transform(df)
     prediction = model['model'].predict(X_scaled)[0] + 1
-    return prediction
+    return int(prediction)

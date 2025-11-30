@@ -21,15 +21,13 @@ celery.conf.update(
     enable_utc=True,
 )
 
-def get_prediction(features: dict):
+def get_prediction(features: list):
     """Call ML service via gRPC to get pothole prediction"""
     try:
         channel = grpc.insecure_channel("ml-service:50051")
         stub = ml_service_pb2_grpc.MLServiceStub(channel)
-
-        feature_list = [features['speed'], features['accelerometerX'], features['accelerometerY'],
-                        features['accelerometerZ'], features['gyroX'], features['gyroY'], features['gyroZ']]
-
+        feature_list = list(features.values())
+        print(f"Sending features to ML service: {feature_list}")
         request = ml_service_pb2.PredictRequest(features=feature_list)
         response = stub.Predict(request)
         return response.prediction
