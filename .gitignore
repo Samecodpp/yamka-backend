@@ -70,8 +70,6 @@ Thumbs.db
 *.sqlite
 *.sqlite3
 
-# Diagrams (keep in repo if needed, remove if not)
-# ER-diagram.drawio
 
 # Docker
 docker-compose.override.yml
@@ -81,7 +79,7 @@ docker-compose.override.yml
 *.bak
 *.swp
 
-ER-diagram.drawio
+
 docs/
 *.drawio
 

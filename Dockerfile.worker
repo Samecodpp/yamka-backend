@@ -1,0 +1,19 @@
+# Базовий образ
+FROM python:3.11-slim
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY application/worker ./application/worker
+COPY application/services ./application/services
+COPY application/models.py ./application/models.py
+COPY application/__init__.py ./application/__init__.py
+
+CMD ["celery", "-A", "application.worker.worker.celery", "worker", "--loglevel=info", "--concurrency=4"]

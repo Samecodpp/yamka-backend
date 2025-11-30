@@ -1,16 +1,13 @@
-from . import create_app, db
-from .celery_app import make_celery
 from flask import current_app
-from .models import DeviceReport
-from .services.pothole_service import PotholeService
+from ..models import DeviceReport
+from ..services.pothole_service import PotholeService
 import pandas as pd
-
-app = create_app()
-celery = make_celery(app)
+from .. import db
+from .worker import celery
 
 @celery.task
 def process_pothole_report(report_id: int):
-    with app.app_context():
+    with current_app.app_context():
         print(f"Processing pothole report {report_id} is started!")
 
         report = DeviceReport.query.get(report_id)
@@ -83,3 +80,8 @@ def process_pothole_report(report_id: int):
             traceback.print_exc()
             db.session.rollback()
             return
+
+@celery.task
+def test_task(x, y):
+    print(f"Test task called with arguments: {x}, {y}")
+    return x + y

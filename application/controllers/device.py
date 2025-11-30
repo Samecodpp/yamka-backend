@@ -1,7 +1,9 @@
-from flask import request, jsonify, current_app
+from flask import request, jsonify
 from marshmallow import ValidationError
+from numpy import test
 from ..services.device_service import DeviceService
 from ..schemas import DeviceReportSchema
+from ..worker.tasks import test_task
 from . import device_bp
 
 report_schema = DeviceReportSchema()
@@ -22,12 +24,5 @@ def report():
     if report is None:
         return jsonify({"error": "Database unavailable"}), 500
 
-    # try:
-    #     celery = current_app.celery
-    # except Exception:
-    #     celery = None
-
-    # if celery:
-    #     celery.send_task('application.celery_worker.process_pothole_report', args=[report.id])
-
+    test_task.delay(5, 7)
     return jsonify({"status": "accepted", "report_id": report.id, "message": "Report is being processed"}), 201

@@ -51,7 +51,7 @@ htmlcov/
 *.swp
 *.swo
 *~
-ER-diagram.drawio
+
 # OS files
 .DS_Store
 Thumbs.db
