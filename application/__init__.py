@@ -22,10 +22,9 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
+
+    # Import models so Flask-Migrate can detect them
     from . import models
-    with app.app_context():
-        db.create_all()
-        print("Database tables created or verified.")
 
     login_manager.init_app(app)
     bcrypt.init_app(app)
