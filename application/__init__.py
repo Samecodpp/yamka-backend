@@ -22,8 +22,8 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
+    from . import models
     with app.app_context():
-        from . import models
         db.create_all()
         print("Database tables created or verified.")
 

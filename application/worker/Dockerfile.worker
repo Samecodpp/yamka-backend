@@ -6,13 +6,18 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copy requirements
-COPY application/worker/requirements-worker.txt .
-RUN pip install --no-cache-dir -r requirements-worker.txt
+# # Copy requirements
+# COPY application/worker/requirements-worker.txt .
+# RUN pip install --no-cache-dir -r requirements-worker.txt
 
-# Copy worker directory
-COPY application/worker ./application/worker
+# # Copy worker directory
+# COPY application/worker ./application/worker
+
+COPY . .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r application/worker/requirements-worker.txt
 
 ENV PYTHONPATH="/app"
 
 CMD ["celery", "-A", "application.worker.worker", "worker", "--loglevel=info", "--concurrency=4"]
+

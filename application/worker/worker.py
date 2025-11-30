@@ -7,6 +7,20 @@ from . import ml_service_pb2_grpc
 
 load_dotenv()
 
+# Create Flask app for database access
+def create_flask_app():
+    from flask import Flask
+    from application import db
+
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    db.init_app(app)
+    return app
+
+flask_app = create_flask_app()
+
 celery = Celery(
     "worker",
     broker=os.getenv("CELERY_BROKER_URL", "amqp://guest:guest@rabbitmq:5672//"),
@@ -26,9 +40,10 @@ def get_prediction(features: list):
     try:
         channel = grpc.insecure_channel("ml-service:50051")
         stub = ml_service_pb2_grpc.MLServiceStub(channel)
-        feature_list = list(features.values())
-        print(f"Sending features to ML service: {feature_list}")
-        request = ml_service_pb2.PredictRequest(features=feature_list)
+
+        # features is already a list
+        print(f"Sending features to ML service: {features}")
+        request = ml_service_pb2.PredictRequest(features=features)
         response = stub.Predict(request)
         return response.prediction
     except Exception as e:
