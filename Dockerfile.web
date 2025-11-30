@@ -25,7 +25,12 @@ COPY ./application/celery_app.py ./application/celery_app.py
 # Make entrypoint executable
 RUN chmod +x docker-entrypoint.sh
 
-RUN useradd -ms /bin/bash appuser && chown -R appuser:appuser /app
+# Create user and set permissions BEFORE switching user
+RUN useradd -ms /bin/bash appuser
+
+# Create migrations directory with proper permissions
+RUN mkdir -p migrations && chown -R appuser:appuser /app
+
 USER appuser
 
 ENV FLASK_APP=wsgi.py
