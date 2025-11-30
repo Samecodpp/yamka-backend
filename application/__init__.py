@@ -24,6 +24,7 @@ def create_app():
     migrate.init_app(app, db)
     with app.app_context():
         db.create_all()
+        print("Database tables created or verified.")
 
     login_manager.init_app(app)
     bcrypt.init_app(app)
