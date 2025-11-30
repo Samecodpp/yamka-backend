@@ -48,12 +48,19 @@ services:
       retries: 5
       start_period: 30s
 
+  ml-service:
+    build:
+      context: ./application/ml
+      dockerfile: Dockerfile.ml-service
+    env_file: .env
+    restart: always
+
   worker:
     build:
-      context: .
-      dockerfile: Dockerfile.worker
+      context: ./
+      dockerfile: application/worker/Dockerfile.worker
     env_file: .env
-    command: celery -A application.worker.worker.celery worker --loglevel=info --concurrency=4
+    command: celery -A application.worker.worker worker --loglevel=info --concurrency=4
     depends_on:
       db:
         condition: service_healthy
@@ -61,6 +68,8 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+      ml-service:
+        condition: service_started
     restart: on-failure
 
   web:
@@ -68,7 +77,7 @@ services:
       context: .
       dockerfile: Dockerfile.web
     env_file: .env
-    command: gunicorn app:app -b 0.0.0.0:8000
+    command: gunicorn wsgi:app -b 0.0.0.0:8000 --workers 3
     ports:
       - "8000:8000"
     depends_on:

@@ -10,7 +10,14 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install gunicorn
 
-COPY . .
+COPY wsgi.py ./wsgi.py
+COPY application/controllers ./application/controllers
+COPY application/models.py ./application/models.py
+COPY application/__init__.py ./application/__init__.py
+COPY application/services ./application/services
+COPY application/schemas ./application/schemas
+COPY  ./application/celery_app.py ./application/celery_app.py
+
 
 RUN useradd -ms /bin/bash appuser && chown -R appuser:appuser /app
 USER appuser
@@ -20,4 +27,4 @@ ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:8000", "app:app"]
+CMD ["gunicorn", "--workers", "3", "--bind", "0.0.0.0:8000", "wsgi:app"]

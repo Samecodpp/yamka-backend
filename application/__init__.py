@@ -4,8 +4,6 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
-import redis
-from .services.ml import model_init
 from redis import Redis
 import os
 
@@ -36,8 +34,8 @@ def create_app():
     if redis_client.ping():
         print("Connected to Redis successfully!")
 
-    yamka_model = model_init.init_model()
-    app.yamka_model = yamka_model
+    from .celery_app import make_celery
+    app.celery = make_celery(app)
 
     from .controllers import auth_bp, device_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')

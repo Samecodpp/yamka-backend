@@ -9,9 +9,4 @@ marshmallow
 psycopg2-binary
 celery
 redis
-joblib
-scikit-learn
-pandas
-numpy
-matplotlib
-seaborn
+
