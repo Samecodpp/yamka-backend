@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package ml_service;
+
+message PredictRequest {
+  repeated float features = 1;
+}
+
+message PredictResponse {
+  int32 prediction = 1;
+}
+
+service MLService {
+  rpc Predict(PredictRequest) returns (PredictResponse);
+}
