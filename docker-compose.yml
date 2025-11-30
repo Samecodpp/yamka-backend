@@ -79,7 +79,7 @@ services:
     env_file: .env
     command: gunicorn wsgi:app -b 0.0.0.0:8000 --workers 3
     ports:
-      - "8000:8000"
+      - "80:8000"
     depends_on:
       db:
         condition: service_healthy
