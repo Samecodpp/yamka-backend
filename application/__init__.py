@@ -19,13 +19,9 @@ def create_app():
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.getenv('TRACK_MODIFICATIONS', 'False').lower() == 'true'
-
+    from . import models
     db.init_app(app)
     migrate.init_app(app, db)
-
-    # Import models so Flask-Migrate can detect them
-    from . import models
-
     login_manager.init_app(app)
     bcrypt.init_app(app)
 
