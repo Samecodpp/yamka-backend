@@ -1,12 +1,5 @@
-# Environment variables and secrets
 .env
-.env.*
-.env.local
-.env.development
-.env.production
-secrets.env
 
-# Python bytecode
 __pycache__/
 *.py[cod]
 *$py.class
@@ -14,71 +7,22 @@ __pycache__/
 *.pyo
 *.pyd
 
-# C extensions
-*.so
-
-# Distribution / packaging
-build/
-dist/
-*.egg-info/
-*.egg
-wheels/
-
-# Virtual environments
 .venv/
-venv/
-ENV/
-env/
-.Python
 
-# ML Models and training artifacts
 application/services/ml/model/*.pkl
 application/services/ml/model/*.png
 application/services/ml/model/*.joblib
 ml/model/
 
-# Logs
-*.log
-logs/
-*.log.*
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-
-# IDE and editors
 .vscode/
 .idea/
-*.sublime-project
-*.sublime-workspace
-*.swp
-*.swo
-*~
-.DS_Store
 
-# OS files
-Thumbs.db
-.DS_Store
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-
-# Docker
 docker-compose.override.yml
 
-# Temporary files
+
 *.tmp
 *.bak
 *.swp
-
 
 docs/
 *.drawio

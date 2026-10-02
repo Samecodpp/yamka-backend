@@ -1,0 +1,13 @@
+fastapi[standard-no-fastapi-cloud-cli]
+
+sqlalchemy[asyncio]
+asyncpg
+
+pydantic
+pydantic-settings
+
+#aioboto3        async aws sdk
+aio-pika
+
+
+

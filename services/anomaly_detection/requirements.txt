@@ -1,0 +1,12 @@
+grpcio
+grpcio-tools
+
+numpy
+joblib
+lightgbm
+scikit-learn
+
+boto3
+
+pydantic
+pydantic-settings

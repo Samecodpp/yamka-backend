@@ -1,6 +1,0 @@
-celery
-grpcio
-grpcio-tools
-python-dotenv
-redis
-numpy
